@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\Tenant;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
+            'tenant' => ['required', 'string', 'exists:tenants,id'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
@@ -43,6 +45,8 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
+        $tenant = Tenant::find($this->tenant);
+        $tenant->run(function (){
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
@@ -54,6 +58,7 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+        });
     }
 
     /**

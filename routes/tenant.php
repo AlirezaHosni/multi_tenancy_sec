@@ -36,14 +36,9 @@ Route::middleware([
 
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->middleware(['auth'])->name('dashboard');
+    })->name('dashboard')->middleware('auth');
 
     Route::middleware('guest')->group(function () {
-
-        Route::get('login', [AuthenticatedSessionController::class, 'create'])
-            ->name('login');
-
-        Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
             ->name('password.request');

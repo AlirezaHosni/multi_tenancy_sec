@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RegisteredTenantController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +20,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('register', [RegisteredTenantController::class, 'create']);
-Route::post('register', [RegisteredTenantController::class, 'store'])->name('register.tenant');
+    Route::get('/register-tenant', [RegisteredTenantController::class, 'create']);
+
+    Route::post('/register-tenant', [RegisteredTenantController::class, 'store']);
+
+    Route::get('/register', [RegisteredUserController::class, 'create']);
+
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    Route::get('/login', [AuthenticatedSessionController::class, 'create']);
+
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
